@@ -1,5 +1,5 @@
 # PowerBITrendingData.py
-# v1.0.0 02/01/2019
+# v1.0.0 02/01/2020
 # This script will retrieve trending data from a measure on a Hornbill instance, and output the data in a Power BI consumable dataframe
 
 from pandas.io.json import json_normalize
