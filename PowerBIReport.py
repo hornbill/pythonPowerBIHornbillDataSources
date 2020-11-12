@@ -7,12 +7,14 @@ import requests
 import sys
 import time
 import io
+import os
 
 apiKey = 'yourapikey'           # This is the (case sensitive) API key to use to authenticate the API calls against the Hornbill instance
 instanceId = 'yourinstanceid'   # This is the (case sensitive) ID of your Hornbill instance
 reportId = 6                    # This is the ID of the report, which can be taken from the report URL in the admin console
 suspendSeconds = 1              # This is the number of seconds to wait inbetween the checking for report run completion 
 deleteReportInstance = True     # This defines whether the report run instance is deleted once the report data has been retrieved
+useXLSX = False                 # This specifies whether to use the XLSX output from your target Hornbill Report, rather than the default CSV
 
 # Get API endpoint
 URL = 'https://files.hornbill.com/instances/{instanceId}/zoneinfo'.format(instanceId=instanceId)
@@ -83,14 +85,24 @@ while reportComplete == False:
 if reportSuccess == False:
     sys.exit('Report run was not successful: ' + reportRunDetails['statusMessage'])
 
-#Get CSV report
-csvURL = endpoint + "dav/reports/{reportId}/{reportLink}"
-URL = csvURL.format(reportId=reportId,reportLink=reportRunDetails['params']['reportRun']['csvLink'])
-
-getCSV = requests.get(url=URL, headers={'Authorization':'ESP-APIKEY ' + apiKey})
+if useXLSX == True:
+    xlsURL = endpoint + "dav/reports/{reportId}/{reportLink}"
+    for file in reportRunDetails['params']['files']:
+        if file['type'] == 'xlsx':
+            fileName = file['name']
+    URL = xlsURL.format(reportId=reportId,reportLink=fileName)
+    getExcel = requests.get(url=URL, headers={'Authorization':'ESP-APIKEY ' + apiKey})
+    open(fileName, 'wb').write(getExcel.content)
+    df = pd.read_excel(fileName)
+    if os.path.exists(fileName):
+        os.remove(fileName)
+else:
+    csvURL = endpoint + "dav/reports/{reportId}/{reportLink}"
+    URL = csvURL.format(reportId=reportId,reportLink=reportRunDetails['params']['reportRun']['csvLink'])
+    getCSV = requests.get(url=URL, headers={'Authorization':'ESP-APIKEY ' + apiKey})
+    df = pd.read_csv(io.StringIO(getCSV.text))
 
 if deleteReportInstance == True:
     deleteReport = invokeXmlmc('reporting', 'reportRunDelete', reportRunJson)
 
-df = pd.read_csv(io.StringIO(getCSV.text))
 print(df)

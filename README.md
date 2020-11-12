@@ -37,7 +37,8 @@ Script Variables:
 
 - `reportId`: The ID (Primary Key, INT) of the  report to be run;
 - `suspendSeconds`: The number of seconds the script should wait between checks to see if the report is complete;
-- `deleteReportInstance`: a boolean value to determine if, once the report is run on Hornbill and the data has been pulled in to PowerBI, whether the historic report run instance should be removed from your Hornbill report.
+- `deleteReportInstance`: a boolean value to determine if, once the report is run on Hornbill and the data has been pulled in to PowerBI, whether the historic report run instance should be removed from your Hornbill report;
+- `useXLSX`: False = the script will use the CSV output from your report; True = the script will use the XLSX output from your report. NOTE: XLSX output will need to be enabled within the Output Formats > Additional Data Formats section of your report in Hornbill.
 
 ### PowerBIHistoricReport.py
 
@@ -49,7 +50,8 @@ This script will:
 Script Variables:
 
 - `reportId`: The ID (Primary Key, INT) of the  report to be run;
-- `reportRunId`: The Run ID (INT) of a historic run of the above report ID.
+- `reportRunId`: The Run ID (INT) of a historic run of the above report ID;
+- `useXLSX`: False = the script will use the CSV output from your report; True = the script will use the XLSX output from your report. NOTE: XLSX output will need to be enabled within the Output Formats > Additional Data Formats section of your report in Hornbill.
 
 ### PowerBITrendingData.py
 
