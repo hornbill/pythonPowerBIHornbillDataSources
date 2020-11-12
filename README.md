@@ -15,6 +15,7 @@ The following packages are required dependencies, and can be installed using the
 
 - [requests](https://pypi.org/project/requests/)
 - [pandas](https://pypi.org/project/pandas/)
+- [xlrd](https://pypi.org/project/xlrd/)
 
 ## Configuration used in all scripts
 
