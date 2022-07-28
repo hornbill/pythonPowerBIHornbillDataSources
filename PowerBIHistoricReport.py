@@ -30,15 +30,13 @@ def invokeXmlmc(service, method, params):
         'Accept': 'application/json',
         'Authorization': 'ESP-APIKEY ' + apiKey
     }
-    data = {
-        'methodCall':{
+    methodCall={
             '@service':service,
             '@method':method,
             'params':params
-        }
     }
     try:
-        response = requests.post(url=URL, json=data, headers=headers)
+        response = requests.post(url=URL, json=methodCall, headers=headers)
         if 200 >= response.status_code <= 299:
             return response.json()
         else:
