@@ -16,12 +16,15 @@ measureId = 11                  # This is the ID of the measure, which can be ta
 # Get API endpoint
 URL = 'https://files.hornbill.com/instances/{instanceId}/zoneinfo'.format(instanceId=instanceId)
 try:
-    endpoint = requests.get(url = URL).json()["zoneinfo"]["endpoint"]
+    zoneInfo = requests.get(url = URL).json()["zoneinfo"]
+    endpoint = zoneInfo["endpoint"] 
+    if "apiEndpoint" in zoneInfo:
+        endpoint = zoneInfo["apiEndpoint"]
 except requests.exceptions.RequestException as e:
     sys.exit('Unexpected response when attempting to retrieve Hornbill Zone Information: ' + e)
 
 def invokeXmlmc(service, method, params):
-    xmlmcEndpoint = endpoint + "xmlmc/{service}/?method={method}" 
+    xmlmcEndpoint = endpoint + "{service}/?method={method}" 
     URL = xmlmcEndpoint.format(service=service, method=method)
     headers = {
         'Content-type': 'application/json',
